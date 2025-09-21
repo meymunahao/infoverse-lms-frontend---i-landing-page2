@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply min-h-screen bg-slate-50 font-sans text-slate-900 antialiased;
+}
+
+a {
+  @apply text-brand hover:text-brand-dark transition-colors;
+}
+
+.section-title {
+  @apply text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl;
+}
+
+.section-subtitle {
+  @apply mt-3 max-w-2xl text-base text-slate-600 sm:text-lg;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-sm font-medium text-brand;
+}
+
+.shadow-elevated {
+  box-shadow: 0 35px 60px -30px rgba(15, 109, 182, 0.35);
+}
