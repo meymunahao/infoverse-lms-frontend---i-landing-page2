@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
@@ -78,7 +79,13 @@ export const ILandingPage = (): JSX.Element => {
               </div>
 
               <div className="bg-[#f9f9f9] rounded-[30px] shadow-[0px_4px_4px_#00000040] px-12 py-4">
-                <div className="flex items-center gap-8">
+                <div className="flex flex-wrap items-center gap-8">
+                  <Button
+                    asChild
+                    className="bg-[#dd7c5e] text-white text-4xl font-normal px-10 py-6 rounded-[30px] h-auto hover:bg-[#dd7c5e]/90"
+                  >
+                    <Link to="/admin/dashboard">Admin Dashboard</Link>
+                  </Button>
                   <Button
                     variant="ghost"
                     className="text-black text-4xl font-normal p-0 h-auto hover:bg-transparent"
