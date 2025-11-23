@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  /* Design System Colors */
+  --primary: #4A9FC7;
+  --primary-light: #6BB3D4;
+  --primary-dark: #3A8AAD;
+
+  --secondary: #E87B5C;
+  --secondary-light: #F29580;
+  --secondary-dark: #D66B4D;
+
+  --accent-coral: #D4856D;
+  --accent-purple: #8B5CF6;
+  --accent-blue: #3B82F6;
+
+  --background-dark: #2C5F75;
+  --background-light: #F5F5F5;
+
+  --text-dark: #333333;
+  --text-light: #666666;
+
+  --white: #FFFFFF;
+}
+
+@theme inline {
+  /* Primary Colors */
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+
+  /* Secondary Colors */
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-dark: var(--secondary-dark);
+
+  /* Accent Colors */
+  --color-accent-coral: var(--accent-coral);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-blue: var(--accent-blue);
+
+  /* Background Colors */
+  --color-background-dark: var(--background-dark);
+  --color-background-light: var(--background-light);
+
+  /* Text Colors */
+  --color-text-dark: var(--text-dark);
+  --color-text-light: var(--text-light);
+
+  /* Border Radius */
+  --radius-card: 12px;
+  --radius-button: 8px;
+
+  /* Box Shadows */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans, 'Inter', system-ui, sans-serif);
+}
+
+body {
+  background: var(--background-light);
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
