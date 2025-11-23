@@ -9,3 +9,6 @@ export type { ContainerProps } from './Container';
 
 export { Loading, LoadingPage } from './Loading';
 export type { LoadingProps } from './Loading';
+
+export { default as Input } from './Input';
+export type { InputProps } from './Input';

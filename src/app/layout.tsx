@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { Header, Footer } from '@/components/layout';
+import { LayoutWrapper } from '@/components/layout';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const inter = Inter({
   variable: '--font-geist-sans',
@@ -29,10 +30,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased flex flex-col min-h-screen`}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <body
+        className={`${inter.variable} antialiased flex flex-col min-h-screen`}
+      >
+        <AuthProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </AuthProvider>
       </body>
     </html>
   );
