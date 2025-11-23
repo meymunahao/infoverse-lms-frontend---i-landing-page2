@@ -7,10 +7,13 @@ import { Footer } from './Footer';
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // Don't show Header/Footer on auth pages
-  const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/register');
+  // Don't show Header/Footer on auth pages and dashboard pages
+  const isAuthPage =
+    pathname?.startsWith('/login') || pathname?.startsWith('/register');
+  const isDashboardPage =
+    pathname?.startsWith('/dashboard') || pathname?.startsWith('/browse');
 
-  if (isAuthPage) {
+  if (isAuthPage || isDashboardPage) {
     return <>{children}</>;
   }
 
