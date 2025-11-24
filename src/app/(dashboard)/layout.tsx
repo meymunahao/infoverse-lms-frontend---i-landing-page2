@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
@@ -63,9 +64,25 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-white p-3">
       <div className="flex gap-0 h-[calc(100vh-24px)]">
         {/* Sidebar */}
-        <aside className="w-[175px] bg-[#33A1CD] rounded-[15px] flex flex-col flex-shrink-0">
+        <aside className="w-[175px] bg-gradient-to-br from-[#33A1CD] via-primary to-primary-dark rounded-[15px] flex flex-col flex-shrink-0 shadow-lg">
+          {/* Logo */}
+          <div className="pt-6 pb-4 px-4 flex justify-center">
+            <Link href="/" className="group">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-xl hover:shadow-2xl transition-all hover:scale-105 p-1">
+                <Image
+                  src="/LOGO.jpg"
+                  alt="Infoverse Digital-Ed Logo"
+                  width={76}
+                  height={76}
+                  className="rounded-full object-cover"
+                  priority
+                />
+              </div>
+            </Link>
+          </div>
+
           {/* Navigation Items */}
-          <nav className="flex-1 py-8 space-y-2">
+          <nav className="flex-1 py-4 space-y-2">
             <NavItem
               href="/dashboard"
               icon={

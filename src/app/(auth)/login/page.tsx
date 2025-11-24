@@ -71,11 +71,19 @@ export default function LoginPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-5xl font-bold text-black">Log In</h1>
+      <div>
+        <h1 className="text-5xl font-bold text-black mb-2 bg-gradient-to-r from-[#33A1CD] to-primary bg-clip-text text-transparent">
+          Log In
+        </h1>
+        <p className="text-lg text-gray-600">Welcome back! Please enter your credentials.</p>
+      </div>
 
       {generalError && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
-          {generalError}
+        <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl text-red-700 flex items-start gap-3 animate-shake shadow-lg">
+          <svg className="w-6 h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="text-base font-medium">{generalError}</span>
         </div>
       )}
 
@@ -102,18 +110,20 @@ export default function LoginPage() {
           />
 
           <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-base text-black cursor-pointer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
-              />
-              Remember me
+            <label className="flex items-center gap-3 text-base text-black cursor-pointer group">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-5 h-5 rounded-md border-2 border-gray-400 text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition cursor-pointer"
+                />
+              </div>
+              <span className="group-hover:text-primary transition">Remember me</span>
             </label>
             <Link
               href="/forgot-password"
-              className="text-base text-primary hover:underline"
+              className="text-base text-primary hover:text-primary-dark font-medium transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary-dark after:transition-all hover:after:w-full"
             >
               Forgot password?
             </Link>
@@ -126,11 +136,11 @@ export default function LoginPage() {
       </form>
 
       <div className="text-center">
-        <p className="text-xl text-black">
+        <p className="text-xl text-gray-700">
           Don&apos;t have an account?{' '}
           <Link
             href="/register"
-            className="font-semibold hover:text-primary transition"
+            className="font-bold text-primary hover:text-primary-dark transition-colors underline decoration-2 underline-offset-2"
           >
             Sign Up
           </Link>
@@ -139,16 +149,16 @@ export default function LoginPage() {
 
       {/* Divider with OR */}
       <div className="relative flex items-center justify-center">
-        <div className="flex-1 border-t border-gray-300"></div>
-        <span className="px-4 text-xl text-[#7A7A7A]">OR</span>
-        <div className="flex-1 border-t border-gray-300"></div>
+        <div className="flex-1 border-t-2 border-gray-300"></div>
+        <span className="px-6 text-xl text-[#7A7A7A] font-semibold bg-[#F3F3F3]">OR</span>
+        <div className="flex-1 border-t-2 border-gray-300"></div>
       </div>
 
       {/* Google Login Button */}
       <button
         onClick={handleGoogleLogin}
         type="button"
-        className="w-full h-16 bg-[#BDD0D2] rounded-[15px] flex items-center justify-center gap-3 text-xl text-black hover:bg-[#A8BFC1] transition"
+        className="w-full h-16 bg-[#BDD0D2] rounded-[15px] flex items-center justify-center gap-3 text-xl text-black hover:bg-[#A8BFC1] transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] font-medium shadow-md"
       >
         <svg className="w-6 h-6" viewBox="0 0 24 24">
           <path
