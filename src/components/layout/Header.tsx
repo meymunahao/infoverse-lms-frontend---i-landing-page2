@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Container } from '@/components/ui';
 import { cn } from '@/lib/utils/cn';
 
@@ -16,12 +17,24 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-primary text-white shadow-md">
+    <header className="bg-primary text-white shadow-lg">
       <Container>
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between py-3">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold">
-            Infoverse Digital-Ed
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-white p-1 shadow-md group-hover:shadow-lg transition-shadow">
+              <Image
+                src="/LOGO.jpg"
+                alt="Infoverse Digital-Ed Logo"
+                width={48}
+                height={48}
+                className="object-cover rounded-full"
+                priority
+              />
+            </div>
+            <span className="text-xl md:text-2xl font-bold group-hover:text-secondary-light transition-colors">
+              Infoverse Digital-Ed
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -30,11 +43,16 @@ export const Header: React.FC = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-secondary-light transition-colors duration-200"
+                className="hover:text-secondary-light transition-colors duration-200 font-medium"
               >
                 {link.label}
               </Link>
             ))}
+            <Link href="/login">
+              <button className="px-4 py-2 bg-secondary hover:bg-secondary-dark rounded-lg transition-colors font-medium">
+                Login
+              </button>
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -72,7 +90,7 @@ export const Header: React.FC = () => {
         <nav
           className={cn(
             'md:hidden overflow-hidden transition-all duration-300',
-            isMobileMenuOpen ? 'max-h-64 pb-4' : 'max-h-0'
+            isMobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'
           )}
         >
           {navLinks.map((link) => (
@@ -85,6 +103,11 @@ export const Header: React.FC = () => {
               {link.label}
             </Link>
           ))}
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+            <button className="w-full text-left py-2 hover:text-secondary-light transition-colors mt-2">
+              Login
+            </button>
+          </Link>
         </nav>
       </Container>
     </header>

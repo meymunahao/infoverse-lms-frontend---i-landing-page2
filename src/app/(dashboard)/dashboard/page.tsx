@@ -42,14 +42,21 @@ export default function DashboardPage() {
     <div className="p-8">
       {/* Header with Profile Card */}
       <div className="flex justify-between items-start mb-12">
-        <h1 className="text-4xl font-semibold text-black">Dashboard</h1>
+        <div>
+          <h1 className="text-4xl font-bold text-black mb-2 bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">
+            Welcome back, {user?.name?.split(' ')[0] || 'Student'}!
+          </h1>
+          <p className="text-xl text-gray-600">Continue your learning journey</p>
+        </div>
         <ProfileCard />
       </div>
 
       {/* My Courses Section */}
       <section className="mb-16">
-        <h2 className="text-3xl font-semibold text-black mb-4">My Courses</h2>
-        <p className="text-xl text-black mb-6">Continue Learning</p>
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-black mb-2">My Courses</h2>
+          <p className="text-lg text-gray-600">Pick up where you left off</p>
+        </div>
 
         <div className="flex gap-6 flex-wrap">
           {myCourses.map((course) => (
@@ -67,9 +74,12 @@ export default function DashboardPage() {
 
       {/* Suggested Courses Section */}
       <section>
-        <h2 className="text-3xl font-semibold text-black mb-6">
-          Suggested New Courses
-        </h2>
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-black mb-2">
+            Suggested New Courses
+          </h2>
+          <p className="text-lg text-gray-600">Explore new subjects to expand your knowledge</p>
+        </div>
 
         <div className="flex gap-6 flex-wrap">
           {suggestedCourses.map((course) => (

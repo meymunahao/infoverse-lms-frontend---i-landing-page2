@@ -78,11 +78,19 @@ export default function RegisterPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-5xl font-bold text-black">Sign Up</h1>
+      <div>
+        <h1 className="text-5xl font-bold text-black mb-2 bg-gradient-to-r from-[#33A1CD] to-primary bg-clip-text text-transparent">
+          Sign Up
+        </h1>
+        <p className="text-lg text-gray-600">Create your account to start learning today!</p>
+      </div>
 
       {generalError && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
-          {generalError}
+        <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl text-red-700 flex items-start gap-3 animate-shake shadow-lg">
+          <svg className="w-6 h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="text-base font-medium">{generalError}</span>
         </div>
       )}
 
@@ -123,11 +131,11 @@ export default function RegisterPage() {
       </form>
 
       <div className="text-center">
-        <p className="text-xl text-black">
-          Are you a member?{' '}
+        <p className="text-xl text-gray-700">
+          Already have an account?{' '}
           <Link
             href="/login"
-            className="font-semibold hover:text-primary transition"
+            className="font-bold text-primary hover:text-primary-dark transition-colors underline decoration-2 underline-offset-2"
           >
             Log In
           </Link>
@@ -136,16 +144,16 @@ export default function RegisterPage() {
 
       {/* Divider with OR */}
       <div className="relative flex items-center justify-center">
-        <div className="flex-1 border-t border-gray-300"></div>
-        <span className="px-4 text-xl text-[#7A7A7A]">OR</span>
-        <div className="flex-1 border-t border-gray-300"></div>
+        <div className="flex-1 border-t-2 border-gray-300"></div>
+        <span className="px-6 text-xl text-[#7A7A7A] font-semibold bg-[#F3F3F3]">OR</span>
+        <div className="flex-1 border-t-2 border-gray-300"></div>
       </div>
 
       {/* Google Sign Up Button */}
       <button
         onClick={handleGoogleSignUp}
         type="button"
-        className="w-full h-16 bg-[#BDD0D2] rounded-[15px] flex items-center justify-center gap-3 text-xl text-black hover:bg-[#A8BFC1] transition"
+        className="w-full h-16 bg-[#BDD0D2] rounded-[15px] flex items-center justify-center gap-3 text-xl text-black hover:bg-[#A8BFC1] transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] font-medium shadow-md"
       >
         <svg className="w-6 h-6" viewBox="0 0 24 24">
           <path
