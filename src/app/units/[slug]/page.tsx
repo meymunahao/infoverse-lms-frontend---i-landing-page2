@@ -1,18 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { Container, Card, CardHeader, CardTitle, CardContent, Loading, Button } from '@/components/ui';
-import { useUnit, useLessons } from '@/lib/hooks/useOakData';
+import { useParams, useRouter } from 'next/navigation';
+import { Card, CardHeader, CardTitle, Loading, Button } from '@/components/ui';
+import { LessonCard } from '@/components/lessons/LessonCard';
+import { useUnit, useLessons, useSubject } from '@/lib/hooks/useOakData'; // Assuming useSubject is available
+
+const PAID_SUBJECTS = ['german', 'french', 'spanish', 'latin']; // Re-define for consistency
 
 export default function UnitPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const { data: unit, error: unitError, isLoading: unitLoading } = useUnit(slug);
   const { data: lessons, error: lessonsError, isLoading: lessonsLoading } = useLessons({ unitSlug: slug });
 
-  const isLoading = unitLoading || lessonsLoading;
+  // Fetch subject details to determine if it's a paid subject
+  const { data: subject, isLoading: subjectMetaLoading } = useSubject(unit?.subjectSlug || '', { enabled: !!unit?.subjectSlug });
+  const isPaidSubject = PAID_SUBJECTS.includes(subject?.slug.toLowerCase() || '');
+
+  const isLoading = unitLoading || lessonsLoading || subjectMetaLoading;
   const error = unitError || lessonsError;
 
   if (isLoading) {
@@ -25,102 +33,74 @@ export default function UnitPage() {
 
   if (error || !unit) {
     return (
-      <Container className="py-16">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-text-dark mb-4">
-            Error Loading Unit
-          </h2>
-          <p className="text-text-light mb-6">
-            Unable to load this unit. Please try again later.
-          </p>
-          <Link href="/subjects">
-            <Button variant="primary">Back to Subjects</Button>
-          </Link>
-        </div>
-      </Container>
+      <div className="text-center py-16 bg-white rounded-xl shadow-soft">
+        <h2 className="text-2xl font-bold text-red-500 mb-4">
+          Error Loading Unit
+        </h2>
+        <p className="text-gray-500 mb-6">
+          Unable to load this unit. Please try again later.
+        </p>
+        <Button onClick={() => router.back()} variant="outline">
+          ← Back
+        </Button>
+      </div>
     );
   }
 
   return (
-    <div className="bg-background-light min-h-screen py-16">
-      <Container>
-        {/* Breadcrumb */}
-        <nav className="mb-8 text-sm text-text-light">
-          <Link href="/" className="hover:text-primary">Home</Link>
-          {' / '}
-          <Link href="/subjects" className="hover:text-primary">Subjects</Link>
-          {' / '}
+    <div className="space-y-8">
+      {/* Header with Breadcrumbs and Title */}
+      <Card className="p-6 shadow-soft">
+        <nav className="mb-3 text-sm font-medium text-gray-500">
+          <Link href="/browse" className="hover:text-primary">Browse</Link>
+          <span className="mx-2">/</span>
           <Link href={`/subjects/${unit.subjectSlug}`} className="hover:text-primary">
             {unit.subjectTitle}
           </Link>
-          {' / '}
-          <span className="text-text-dark font-semibold">{unit.title}</span>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900">{unit.title}</span>
         </nav>
-
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-4">
-            {unit.title}
-          </h1>
-          <div className="flex flex-wrap gap-4 text-lg text-text-light">
-            <span>{unit.subjectTitle}</span>
-            {unit.yearTitle && (
-              <>
-                <span>•</span>
-                <span>{unit.yearTitle}</span>
-              </>
-            )}
-            <span>•</span>
-            <span>{unit.numberOfLessons} lessons</span>
-          </div>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          Unit {unit.unitNumber}: {unit.title}
+        </h1>
+        <div className="flex items-center gap-3 text-sm text-gray-500">
+          <span>{unit.subjectTitle}</span>
+          {unit.yearTitle && (
+            <>
+              <span className="text-gray-300">•</span>
+              <span>{unit.yearTitle}</span>
+            </>
+          )}
+          <span className="text-gray-300">•</span>
+          <span>{unit.numberOfLessons} Lessons</span>
         </div>
+      </Card>
 
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-text-dark mb-6">
-            Lessons
-          </h2>
-        </div>
-
+      {/* Lessons List */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Lessons in this Unit</h2>
         {lessons && lessons.length > 0 ? (
           <div className="space-y-4">
             {lessons
               .sort((a, b) => a.lessonNumber - b.lessonNumber)
-              .map((lesson) => (
-                <Link key={lesson.slug} href={`/lessons/${lesson.slug}`}>
-                  <Card hover>
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">
-                        {lesson.lessonNumber}
-                      </div>
-                      <div className="flex-grow">
-                        <CardHeader className="mb-2">
-                          <CardTitle>{lesson.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          {lesson.description && (
-                            <p className="text-text-light mb-2">
-                              {lesson.description}
-                            </p>
-                          )}
-                          {lesson.expired && (
-                            <span className="inline-block px-3 py-1 bg-secondary text-white text-sm rounded-full">
-                              Content may be outdated
-                            </span>
-                          )}
-                        </CardContent>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
+              .map((lesson, index) => (
+                <LessonCard
+                  key={lesson.slug}
+                  lesson={lesson}
+                  subjectSlug={unit.subjectSlug} // Pass subjectSlug to LessonCard
+                  isPaidSubject={isPaidSubject}
+                  isFirstLesson={index === 0}
+                />
               ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-text-light text-lg">
-              No lessons found for this unit.
+          <div className="text-center py-12 bg-white rounded-xl shadow-soft">
+            <p className="text-lg text-gray-500">
+              No lessons found for this unit yet.
             </p>
           </div>
         )}
-      </Container>
+      </div>
     </div>
   );
 }

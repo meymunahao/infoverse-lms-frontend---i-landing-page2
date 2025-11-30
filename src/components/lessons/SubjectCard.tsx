@@ -1,4 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui';
+import { useAuth } from '@/contexts/AuthContext';
+import clsx from 'clsx';
 
 interface SubjectCardProps {
   subject: {
@@ -10,46 +15,79 @@ interface SubjectCardProps {
   keyStage: number;
 }
 
-export function SubjectCard({ subject, keyStage }: SubjectCardProps) {
-  return (
-    <Link href={`/subjects/${subject.slug}`}>
-      <div className="bg-[#BDD0D2] rounded-[15px] p-6 hover:bg-[#A8BFC1] transition-colors cursor-pointer h-[200px] flex flex-col justify-between">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-            <svg
-              className="w-6 h-6 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-              />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-semibold text-black mb-2">
-              {subject.title}
-            </h3>
-            {subject.description && (
-              <p className="text-sm text-black line-clamp-2">
-                {subject.description}
-              </p>
-            )}
-          </div>
-        </div>
+// Paid subjects list
+const PAID_SUBJECTS = ['german', 'french', 'spanish', 'latin'];
 
-        {subject.lessonCount !== undefined && (
-          <div className="text-sm text-black">
-            {subject.lessonCount} lessons available
-          </div>
+export function SubjectCard({ subject, keyStage }: SubjectCardProps) {
+  const { user } = useAuth();
+  
+  // Determine if content is locked
+  const isPaidSubject = PAID_SUBJECTS.includes(subject.slug.toLowerCase());
+  const isLocked = isPaidSubject && user?.role === 'free'; // Assuming user object has a role
+
+  // Placeholder icon generation based on first letter
+  const firstLetter = subject.title.charAt(0).toUpperCase();
+
+  const CardWrapper = ({ children }: { children: React.ReactNode }) => {
+    return <Link href={`/subjects/${subject.slug}`} className="h-full block">{children}</Link>;
+  };
+
+  return (
+    <CardWrapper>
+      <Card 
+        hover={true}
+        className={clsx(
+            "h-full flex flex-col transition-all duration-300 relative overflow-hidden group border-gray-100",
+            isLocked && "opacity-90"
+        )}
+      >
+        {isLocked && (
+            <>
+                <div className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm text-secondary">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <div className="absolute top-4 right-14 z-10 px-2 py-1 bg-secondary text-white text-[10px] font-bold uppercase tracking-wider rounded-md shadow-sm">
+                    Premium Only
+                </div>
+            </>
         )}
 
-        <div className="text-xs text-text-light">Key Stage {keyStage}</div>
-      </div>
-    </Link>
+        <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold bg-primary/10 text-primary shadow-sm group-hover:scale-105 transition-transform duration-300">
+                {firstLetter}
+            </div>
+            <div>
+                 <CardTitle className="text-lg line-clamp-1">{subject.title}</CardTitle>
+                 <span className="text-xs font-medium text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100">
+                    KS{keyStage}
+                 </span>
+            </div>
+        </CardHeader>
+
+        <CardContent className="mt-2 flex-1 flex flex-col justify-between">
+           {subject.description ? (
+               <p className="text-sm text-gray-500 line-clamp-2 mb-4">
+                  {subject.description}
+               </p>
+           ) : (
+                <p className="text-sm text-gray-400 italic mb-4">
+                    Explore this subject to learn more.
+                </p>
+           )}
+           
+           <div className="pt-4 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400 font-medium">
+               <span>{subject.lessonCount ? `${subject.lessonCount} Lessons` : 'Content Available'}</span>
+               <span className={clsx("flex items-center gap-1 transition-all", isLocked ? "text-secondary" : "text-primary group-hover:gap-2")}>
+                   {isLocked ? "Upgrade" : "Explore"}
+                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                   </svg>
+               </span>
+           </div>
+        </CardContent>
+      </Card>
+    </CardWrapper>
   );
 }
