@@ -17,7 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-text-dark mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             {label}
           </label>
         )}
@@ -26,13 +26,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             type={inputType}
             className={cn(
-              'w-full h-16 px-5 rounded-[15px] bg-[#BDD0D2]',
-              'text-black text-xl placeholder:text-[#7A7A7A] placeholder:text-xl',
-              'focus:outline-none focus:ring-2 focus:ring-primary/50',
+              'w-full h-12 px-4 rounded-xl',
+              'bg-gray-50 border border-transparent',
+              'text-gray-900 text-base placeholder:text-gray-400',
+              'focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none',
               'transition-all duration-200',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               {
-                'border-2 border-red-500': error,
+                'border-red-500 focus:border-red-500 focus:ring-red-500/20': error,
               },
               className
             )}
@@ -42,12 +43,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-5 top-1/2 -translate-y-1/2 text-[#7A7A7A] hover:text-black transition"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
               tabIndex={-1}
             >
               {showPassword ? (
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -61,7 +62,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 </svg>
               ) : (
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -83,7 +84,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </button>
           )}
         </div>
-        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+        {error && <p className="mt-1.5 text-sm text-red-500">{error}</p>}
       </div>
     );
   }

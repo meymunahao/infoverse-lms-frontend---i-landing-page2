@@ -1,13 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Container } from '@/components/ui';
+import { Container, Button } from '@/components/ui';
 import { cn } from '@/lib/utils/cn';
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -17,47 +26,52 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="bg-primary text-white shadow-lg">
+    <header 
+      className={cn(
+        "sticky top-0 z-50 transition-all duration-300",
+        "bg-white/80 backdrop-blur-md border-b border-gray-100"
+      )}
+    >
       <Container>
-        <div className="flex items-center justify-between py-3">
+        <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-white p-1 shadow-md group-hover:shadow-lg transition-shadow">
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-shadow bg-primary/5">
               <Image
                 src="/LOGO.jpg"
-                alt="Infoverse Digital-Ed Logo"
-                width={48}
-                height={48}
-                className="object-cover rounded-full"
+                alt="Infoverse Logo"
+                width={40}
+                height={40}
+                className="object-cover"
                 priority
               />
             </div>
-            <span className="text-xl md:text-2xl font-bold group-hover:text-secondary-light transition-colors">
-              Infoverse Digital-Ed
+            <span className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors tracking-tight">
+              Infoverse
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-secondary-light transition-colors duration-200 font-medium"
+                className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium text-sm"
               >
                 {link.label}
               </Link>
             ))}
             <Link href="/login">
-              <button className="px-4 py-2 bg-secondary hover:bg-secondary-dark rounded-lg transition-colors font-medium">
+              <Button variant="primary" size="sm" className="px-6">
                 Login
-              </button>
+              </Button>
             </Link>
           </nav>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 text-gray-600 hover:text-primary transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >
@@ -90,24 +104,28 @@ export const Header: React.FC = () => {
         <nav
           className={cn(
             'md:hidden overflow-hidden transition-all duration-300',
-            isMobileMenuOpen ? 'max-h-96 pb-4' : 'max-h-0'
+            isMobileMenuOpen ? 'max-h-96 pb-4 opacity-100' : 'max-h-0 opacity-0'
           )}
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block py-2 hover:text-secondary-light transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-            <button className="w-full text-left py-2 hover:text-secondary-light transition-colors mt-2">
-              Login
-            </button>
-          </Link>
+          <div className="flex flex-col space-y-2 pt-2 pb-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="pt-2 px-4">
+              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button fullWidth variant="primary">
+                  Login
+                </Button>
+              </Link>
+            </div>
+          </div>
         </nav>
       </Container>
     </header>

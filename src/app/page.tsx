@@ -13,86 +13,40 @@ export default function Home() {
     {
       title: 'Key Stages 1-4',
       description:
-        'Access comprehensive curriculum-aligned content for all key stages from primary to secondary education.',
+        'Comprehensive curriculum-aligned content for primary to secondary education.',
       icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-          />
+        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
       ),
     },
     {
       title: 'Quality Content',
       description:
-        'Trusted educational materials from Oak National Academy, used by thousands of schools across the UK.',
+        'Trusted educational materials from Oak National Academy used across the UK.',
       icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-          />
+        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
     },
     {
       title: 'Free Resources',
       description:
-        'Complete access to lessons, worksheets, and videos at no cost. Education should be accessible to all.',
+        'Complete access to lessons, worksheets, and videos at no cost.',
       icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 14l9-5-9-5-9 5 9 5z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-          />
+        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
     },
     {
       title: 'Easy Navigation',
       description:
-        'Browse by subject, year group, or topic. Find exactly what you need quickly and efficiently.',
+        'Browse by subject, year group, or topic efficiently.',
       icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
+        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       ),
     },
@@ -106,159 +60,134 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-background-light min-h-screen">
+    <div className="min-h-screen bg-background-light">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-background-dark via-primary to-primary-dark text-white py-24 overflow-hidden">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary rounded-full mix-blend-overlay filter blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <Container className="relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-block mb-6 px-6 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
-              <p className="text-sm font-semibold">
-                Powered by Oak National Academy
-              </p>
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent -z-10" />
+        
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-8">
+              <span className="relative flex h-2 w-2 mr-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Powered by Oak National Academy
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Welcome to{' '}
-              <span className="bg-gradient-to-r from-secondary to-secondary-light bg-clip-text text-transparent">
-                Infoverse Digital-Ed
+            
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight mb-6 leading-tight">
+              Master Your Curriculum with <br />
+              <span className="text-primary relative">
+                Infoverse
+                <svg className="absolute w-full h-3 -bottom-1 left-0 text-secondary/30 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                  <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
+                </svg>
               </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-10 text-gray-100 leading-relaxed">
-              Access quality educational content from Oak National Academy for
-              Key Stages 1-4. Learn, explore, and excel.
+            
+            <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Access thousands of high-quality, curriculum-aligned lessons and resources.
+              Free for everyone, forever.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/key-stages">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all"
-                >
-                  Explore Key Stages →
+                <Button size="lg" className="h-14 px-8 text-lg">
+                  Start Learning
                 </Button>
               </Link>
-              <Link href="/subjects">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-background-dark shadow-xl"
-                >
-                  Browse Subjects
+              <Link href="/about">
+                <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
+                  Learn More
                 </Button>
               </Link>
+            </div>
+            
+            {/* Stats/Social Proof */}
+            <div className="mt-16 pt-8 border-t border-gray-200 grid grid-cols-2 md:grid-cols-4 gap-8">
+              {[
+                { label: 'Lessons', value: '10,000+' },
+                { label: 'Subjects', value: '25+' },
+                { label: 'Schools', value: '1,000+' },
+                { label: 'Teachers', value: '500+' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-sm text-gray-500">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20">
+      {/* Features Grid */}
+      <section className="py-24 bg-white">
         <Container>
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-text-dark mb-6 leading-tight">
-              Why Choose{' '}
-              <span className="text-primary">Infoverse Digital-Ed</span>?
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+              Why Choose Infoverse?
             </h2>
-            <p className="text-xl text-text-light max-w-2xl mx-auto leading-relaxed">
-              Your gateway to comprehensive educational resources aligned with
-              the UK curriculum
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+              We provide the tools and resources you need to succeed in your educational journey.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={feature.title}
-                className="group"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <Card
-                  hover
-                  className="h-full transform hover:-translate-y-2 transition-all duration-300"
-                >
-                  <CardHeader>
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white mb-6 shadow-lg group-hover:shadow-xl transition-shadow">
-                      {feature.icon}
-                    </div>
-                    <CardTitle className="text-2xl mb-3">
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-text-light leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
+            {features.map((feature) => (
+              <Card key={feature.title} hover className="border-gray-100 h-full">
+                <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mb-6 shadow-md">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-500 leading-relaxed">
+                  {feature.description}
+                </p>
+              </Card>
             ))}
           </div>
         </Container>
       </section>
 
-      {/* Key Stages Overview */}
-      <section className="py-20 bg-gradient-to-b from-white to-background-light">
+      {/* Key Stages */}
+      <section className="py-24 bg-gray-50">
         <Container>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-text-dark mb-6 leading-tight">
-              Explore by{' '}
-              <span className="text-primary">Key Stage</span>
-            </h2>
-            <p className="text-xl text-text-light max-w-2xl mx-auto leading-relaxed">
-              Select the appropriate key stage to browse curriculum-aligned
-              content tailored to your learning journey
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+                Browse by Key Stage
+              </h2>
+              <p className="text-lg text-gray-500 max-w-xl">
+                Select your education level to find relevant materials suited to your year group.
+              </p>
+            </div>
+            <Link href="/key-stages">
+              <Button variant="outline">View All Stages</Button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {keyStages.map((stage, index) => (
-              <Link
-                key={stage.id}
-                href={`/key-stages/${stage.id}`}
-                className="group"
-              >
-                <Card
-                  hover
-                  className="h-full transform hover:-translate-y-1 transition-all duration-300 bg-gradient-to-br from-white to-gray-50"
-                >
-                  <CardHeader>
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-primary">
-                          {index + 1}
-                        </span>
-                      </div>
-                      <svg
-                        className="w-6 h-6 text-primary opacity-0 group-hover:opacity-100 transition-opacity"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                    <CardTitle className="text-xl mb-2">
-                      {stage.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="font-semibold text-primary text-lg mb-2">
-                      {stage.years}
-                    </p>
-                    <p className="text-sm text-text-light bg-primary/5 px-3 py-1 rounded-full inline-block">
-                      {stage.ages}
-                    </p>
-                  </CardContent>
+              <Link key={stage.id} href={`/key-stages/${stage.id}`}>
+                <Card hover className="h-full group">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                      {index + 1}
+                    </span>
+                    <svg className="w-5 h-5 text-gray-300 group-hover:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    {stage.name}
+                  </h3>
+                  <div className="space-y-1">
+                    <p className="text-gray-600 font-medium">{stage.years}</p>
+                    <p className="text-sm text-gray-400">{stage.ages}</p>
+                  </div>
                 </Card>
               </Link>
             ))}
@@ -267,32 +196,27 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20">
+      <section className="py-24">
         <Container>
-          <div className="relative bg-gradient-to-r from-primary via-primary-dark to-primary text-white rounded-3xl p-12 md:p-16 text-center shadow-2xl overflow-hidden">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full filter blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary rounded-full filter blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                Ready to Start Learning?
+          <div className="relative rounded-3xl overflow-hidden bg-primary px-8 py-16 md:px-16 md:py-20 text-center text-white shadow-2xl">
+            {/* Decorative circles */}
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
+            
+            <div className="relative z-10 max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+                Ready to transform your learning?
               </h2>
-              <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-gray-100 leading-relaxed">
-                Join thousands of students exploring quality educational
-                resources. Start your learning journey today.
+              <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed">
+                Join our community of learners and educators. Sign up today for free access to all our resources.
               </p>
-              <Link href="/register">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  className="shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all text-lg px-10 py-4"
-                >
-                  Get Started Now →
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/register">
+                  <Button variant="secondary" size="lg" className="h-14 px-8 text-lg w-full sm:w-auto shadow-lg hover:shadow-xl">
+                    Get Started Free
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </Container>
