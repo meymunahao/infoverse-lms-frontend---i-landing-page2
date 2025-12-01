@@ -3,8 +3,13 @@ import axios from 'axios';
 /**
  * Axios client configured for Backend Authentication API
  */
+const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1';
+
+// Log the backend connection URL for debugging
+console.log('[API] Connecting to Backend at:', baseURL);
+
 const authApiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api',
+  baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -18,6 +18,17 @@ import type {
 } from '@/types/oak-api.types';
 
 /**
+ * Backend API Response wrapper
+ * The backend returns responses in the format: { success: true, data: T, message: string }
+ */
+interface BackendResponse<T> {
+  success: boolean;
+  data: T;
+  message: string;
+  meta?: any;
+}
+
+/**
  * Check if mock data should be used
  */
 const useMockData = () => {
@@ -39,13 +50,13 @@ export const oakService = {
       return Promise.resolve(mockKeyStages);
     }
 
-    // Real API call
-    const response = await apiClient.get<KeyStage[]>(API_ENDPOINTS.keyStages);
-    return response.data;
+    // Real API call - unwrap the backend response to get the data array
+    const response = await apiClient.get<BackendResponse<KeyStage[]>>(API_ENDPOINTS.keyStages);
+    return response.data.data; // Unwrap: response.data.data to get the array
   },
 
   /**
-   * Fetch subjects, optionally filtered by key stage
+   * Fetch subjects for a specific key stage
    */
   async getSubjects(filters?: SubjectFilters): Promise<Subject[]> {
     if (useMockData()) {
@@ -57,16 +68,18 @@ export const oakService = {
       return Promise.resolve(Object.values(mockSubjects).flat());
     }
 
-    // Real API call
-    const params = filters ? { keyStage: filters.keyStageSlug } : {};
-    const response = await apiClient.get<Subject[]>(API_ENDPOINTS.subjects, {
-      params,
-    });
-    return response.data;
+    // Real API call - requires keyStageSlug
+    if (!filters?.keyStageSlug) {
+      throw new Error('keyStageSlug is required to fetch subjects');
+    }
+
+    const endpoint = API_ENDPOINTS.subjects(filters.keyStageSlug);
+    const response = await apiClient.get<BackendResponse<Subject[]>>(endpoint);
+    return response.data.data; // Unwrap: response.data.data to get the array
   },
 
   /**
-   * Fetch units, optionally filtered
+   * Fetch units for a specific subject
    */
   async getUnits(filters?: UnitFilters): Promise<Unit[]> {
     if (useMockData()) {
@@ -77,19 +90,18 @@ export const oakService = {
       return Promise.resolve(Object.values(mockUnits).flat());
     }
 
-    // Real API call
-    const params: Record<string, string> = {};
-    if (filters?.subjectSlug) params.subject = filters.subjectSlug;
-    if (filters?.yearSlug) params.year = filters.yearSlug;
+    // Real API call - requires subjectSlug
+    if (!filters?.subjectSlug) {
+      throw new Error('subjectSlug is required to fetch units');
+    }
 
-    const response = await apiClient.get<Unit[]>(API_ENDPOINTS.units, {
-      params,
-    });
-    return response.data;
+    const endpoint = API_ENDPOINTS.units(filters.subjectSlug);
+    const response = await apiClient.get<BackendResponse<Unit[]>>(endpoint);
+    return response.data.data; // Unwrap: response.data.data to get the array
   },
 
   /**
-   * Fetch lessons, optionally filtered
+   * Fetch lessons for a specific unit
    */
   async getLessons(filters?: LessonFilters): Promise<Lesson[]> {
     if (useMockData()) {
@@ -100,20 +112,20 @@ export const oakService = {
       return Promise.resolve(Object.values(mockLessons).flat());
     }
 
-    // Real API call
-    const params: Record<string, string> = {};
-    if (filters?.unitSlug) params.unit = filters.unitSlug;
-    if (filters?.subjectSlug) params.subject = filters.subjectSlug;
-    if (filters?.keyStageSlug) params.keyStage = filters.keyStageSlug;
+    // Real API call - requires unitSlug
+    if (!filters?.unitSlug) {
+      throw new Error('unitSlug is required to fetch lessons');
+    }
 
-    const response = await apiClient.get<Lesson[]>(API_ENDPOINTS.lessons, {
-      params,
-    });
-    return response.data;
+    const endpoint = API_ENDPOINTS.lessons(filters.unitSlug);
+    const response = await apiClient.get<BackendResponse<Lesson[]>>(endpoint);
+    return response.data.data; // Unwrap: response.data.data to get the array
   },
 
   /**
    * Fetch a single lesson by slug
+   * NOTE: This endpoint is not yet implemented in the backend API
+   * You may need to add: GET /api/v1/oak/lessons/:slug
    */
   async getLesson(slug: string): Promise<Lesson> {
     if (useMockData()) {
@@ -126,15 +138,15 @@ export const oakService = {
       return Promise.reject(new Error('Lesson not found'));
     }
 
-    // Real API call
-    const response = await apiClient.get<Lesson>(
-      `${API_ENDPOINTS.lessons}/${slug}`
-    );
-    return response.data;
+    // Real API call - requires backend endpoint implementation
+    const response = await apiClient.get<BackendResponse<Lesson>>(`/lessons/${slug}`);
+    return response.data.data; // Unwrap: response.data.data to get the object
   },
 
   /**
    * Fetch years/year groups
+   * NOTE: This endpoint is not yet implemented in the backend API
+   * You may need to add: GET /api/v1/oak/years
    */
   async getYears(): Promise<Year[]> {
     if (useMockData()) {
@@ -142,13 +154,15 @@ export const oakService = {
       return Promise.resolve([]);
     }
 
-    // Real API call
-    const response = await apiClient.get<Year[]>(API_ENDPOINTS.years);
-    return response.data;
+    // Real API call - requires backend endpoint implementation
+    const response = await apiClient.get<BackendResponse<Year[]>>('/years');
+    return response.data.data; // Unwrap: response.data.data to get the array
   },
 
   /**
    * Fetch subject by slug
+   * NOTE: This endpoint is not yet implemented in the backend API
+   * You may need to add: GET /api/v1/oak/subjects/:slug
    */
   async getSubject(slug: string): Promise<Subject> {
     if (useMockData()) {
@@ -161,15 +175,15 @@ export const oakService = {
       return Promise.reject(new Error('Subject not found'));
     }
 
-    // Real API call
-    const response = await apiClient.get<Subject>(
-      `${API_ENDPOINTS.subjects}/${slug}`
-    );
-    return response.data;
+    // Real API call - requires backend endpoint implementation
+    const response = await apiClient.get<BackendResponse<Subject>>(`/subjects/${slug}`);
+    return response.data.data; // Unwrap: response.data.data to get the object
   },
 
   /**
    * Fetch unit by slug
+   * NOTE: This endpoint is not yet implemented in the backend API
+   * You may need to add: GET /api/v1/oak/units/:slug
    */
   async getUnit(slug: string): Promise<Unit> {
     if (useMockData()) {
@@ -182,10 +196,8 @@ export const oakService = {
       return Promise.reject(new Error('Unit not found'));
     }
 
-    // Real API call
-    const response = await apiClient.get<Unit>(
-      `${API_ENDPOINTS.units}/${slug}`
-    );
-    return response.data;
+    // Real API call - requires backend endpoint implementation
+    const response = await apiClient.get<BackendResponse<Unit>>(`/units/${slug}`);
+    return response.data.data; // Unwrap: response.data.data to get the object
   },
 };

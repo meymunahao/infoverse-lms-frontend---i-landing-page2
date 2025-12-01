@@ -1,15 +1,16 @@
 /**
  * Oak National Academy API Configuration
+ * Now proxied through our backend API
  */
 
-export const OAK_API_BASE_URL = 'https://api.thenational.academy';
+export const OAK_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1/oak';
 
 export const API_ENDPOINTS = {
-  keyStages: '/key-stages',
-  subjects: '/subjects',
-  units: '/units',
-  lessons: '/lessons',
-  years: '/years',
+  keyStages: '/keystages',
+  subjects: (keyStage: string) => `/keystages/${keyStage}/subjects`,
+  units: (subject: string) => `/subjects/${subject}/units`,
+  lessons: (unit: string) => `/units/${unit}/lessons`,
 } as const;
 
 export const API_CONFIG = {
