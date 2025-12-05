@@ -5,10 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Container, Button } from '@/components/ui';
 import { cn } from '@/lib/utils/cn';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,12 +20,22 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
+  // Public navigation links (visible to logged out users only)
+  const publicNavLinks = [
     { href: '/', label: 'Home' },
-    { href: '/key-stages', label: 'Key Stages' },
-    { href: '/subjects', label: 'Subjects' },
+    { href: '/pricing', label: 'Pricing' },
     { href: '/about', label: 'About' },
   ];
+
+  // Authenticated navigation links (only visible when logged in)
+  // Logged-in users only see Dashboard and Browse
+  const authenticatedNavLinks = [
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/browse', label: 'Browse' },
+  ];
+
+  // Determine which nav links to show - logged in users see ONLY authenticated links
+  const navLinks = user ? authenticatedNavLinks : publicNavLinks;
 
   return (
     <header 
@@ -38,7 +50,7 @@ export const Header: React.FC = () => {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-shadow bg-primary/5">
               <Image
-                src="/LOGO.jpg"
+                src="/Transparent logo.png"
                 alt="Infoverse Logo"
                 width={40}
                 height={40}
@@ -62,11 +74,39 @@ export const Header: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            <Link href="/login">
-              <Button variant="primary" size="sm" className="px-6">
-                Login
-              </Button>
-            </Link>
+
+            {/* Logged Out: Show CTA buttons */}
+            {!user && (
+              <div className="flex items-center gap-3">
+                <Link href="/login">
+                  <Button variant="outline" size="sm" className="px-5">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button variant="primary" size="sm" className="px-6 shadow-sm">
+                    Start Free Trial
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Logged In: Show user menu */}
+            {user && (
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-600">
+                  Welcome, <span className="font-semibold text-gray-900">{user.name}</span>
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="px-5"
+                  onClick={logout}
+                >
+                  Logout
+                </Button>
+              </div>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -118,13 +158,41 @@ export const Header: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            <div className="pt-2 px-4">
-              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button fullWidth variant="primary">
-                  Login
+
+            {/* Logged Out: Show CTA buttons */}
+            {!user && (
+              <div className="flex flex-col gap-2 pt-2 px-4">
+                <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button fullWidth variant="outline">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/pricing" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button fullWidth variant="primary">
+                    Start Free Trial
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Logged In: Show user info and logout */}
+            {user && (
+              <div className="flex flex-col gap-2 pt-4 px-4 border-t border-gray-100 mt-2">
+                <div className="text-sm text-gray-600 pb-2">
+                  Welcome, <span className="font-semibold text-gray-900">{user.name}</span>
+                </div>
+                <Button
+                  fullWidth
+                  variant="outline"
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  Logout
                 </Button>
-              </Link>
-            </div>
+              </div>
+            )}
           </div>
         </nav>
       </Container>

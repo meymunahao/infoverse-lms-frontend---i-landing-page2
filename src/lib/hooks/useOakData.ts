@@ -1,11 +1,15 @@
-import useSWR from 'swr';
-import { oakService } from '@/lib/api/oak-service';
+import useSWR, { mutate } from 'swr';
+import { useState, useCallback } from 'react';
+import { oakService, EnrollmentProgress, EnrollRequest } from '@/lib/api/oak-service';
 import type {
   KeyStage,
   Subject,
   Unit,
   Lesson,
   Year,
+  LessonQuiz,
+  LessonAssets,
+  LessonTranscript,
   SubjectFilters,
   UnitFilters,
   LessonFilters,
@@ -35,7 +39,7 @@ export function useSubject(slug: string | null) {
 }
 
 export function useUnits(filters?: UnitFilters) {
-  const key = ['units', filters?.subjectSlug, filters?.yearSlug].filter(
+  const key = ['units', filters?.keyStageSlug, filters?.subjectSlug, filters?.yearSlug].filter(
     Boolean
   );
 
@@ -75,4 +79,68 @@ export function useLesson(slug: string | null) {
 
 export function useYears() {
   return useSWR<Year[]>('years', () => oakService.getYears());
+}
+
+export function useLessonQuiz(lessonSlug: string | null) {
+  return useSWR<LessonQuiz>(
+    lessonSlug ? ['lesson-quiz', lessonSlug] : null,
+    () => lessonSlug ? oakService.getLessonQuiz(lessonSlug) : Promise.reject('No slug')
+  );
+}
+
+export function useLessonAssets(lessonSlug: string | null) {
+  return useSWR<LessonAssets>(
+    lessonSlug ? ['lesson-assets', lessonSlug] : null,
+    () => lessonSlug ? oakService.getLessonAssets(lessonSlug) : Promise.reject('No slug')
+  );
+}
+
+export function useLessonTranscript(lessonSlug: string | null) {
+  return useSWR<LessonTranscript>(
+    lessonSlug ? ['lesson-transcript', lessonSlug] : null,
+    () => lessonSlug ? oakService.getLessonTranscript(lessonSlug) : Promise.reject('No slug')
+  );
+}
+
+/**
+ * Hook to fetch user's enrolled courses and progress
+ */
+export function useMyProgress() {
+  return useSWR<EnrollmentProgress[]>(
+    'my-progress',
+    () => oakService.getMyProgress(),
+    {
+      revalidateOnFocus: true,
+      dedupingInterval: 5000,
+    }
+  );
+}
+
+/**
+ * Hook to handle course enrollment
+ */
+export function useEnroll() {
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const enroll = useCallback(async (data: EnrollRequest): Promise<EnrollmentProgress | null> => {
+    setIsEnrolling(true);
+    setError(null);
+
+    try {
+      const result = await oakService.enrollInSubject(data);
+      // Revalidate the progress data after enrollment
+      mutate('my-progress');
+      return result;
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } }; message?: string };
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to enroll';
+      setError(errorMessage);
+      return null;
+    } finally {
+      setIsEnrolling(false);
+    }
+  }, []);
+
+  return { enroll, isEnrolling, error };
 }

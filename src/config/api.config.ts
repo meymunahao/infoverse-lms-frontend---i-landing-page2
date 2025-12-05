@@ -4,13 +4,21 @@
  */
 
 export const OAK_API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1/oak';
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1';
 
 export const API_ENDPOINTS = {
-  keyStages: '/keystages',
-  subjects: (keyStage: string) => `/keystages/${keyStage}/subjects`,
-  units: (subject: string) => `/subjects/${subject}/units`,
-  lessons: (unit: string) => `/units/${unit}/lessons`,
+  keyStages: '/oak/keystages',
+  subjects: (keyStage: string) => `/oak/keystages/${keyStage}/subjects`,
+  units: (keyStage: string, subject: string) => `/oak/subjects/${keyStage}/${subject}/units`,
+  unit: (unitSlug: string) => `/oak/units/${unitSlug}`,
+  lessons: (unit: string) => `/oak/units/${unit}/lessons`,
+  lesson: (lessonSlug: string) => `/oak/lessons/${lessonSlug}`,
+  lessonQuiz: (lessonSlug: string) => `/oak/lessons/${lessonSlug}/quiz`,
+  lessonAssets: (lessonSlug: string) => `/oak/lessons/${lessonSlug}/assets`,
+  lessonTranscript: (lessonSlug: string) => `/oak/lessons/${lessonSlug}/transcript`,
+  // Progress & Enrollment endpoints
+  myProgress: '/progress/my-progress',
+  enroll: '/progress/enroll',
 } as const;
 
 export const API_CONFIG = {

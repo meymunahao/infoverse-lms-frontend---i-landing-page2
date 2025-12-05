@@ -6,7 +6,7 @@ import axios from 'axios';
 const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api/v1';
 
 // Log the backend connection URL for debugging
-console.log('[API] Connecting to Backend at:', baseURL);
+console.log('[Auth Client] Base URL:', baseURL);
 
 const authApiClient = axios.create({
   baseURL,

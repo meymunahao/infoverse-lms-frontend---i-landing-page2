@@ -4,9 +4,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, Loading, Button } from '@/components/ui';
 import { LessonCard } from '@/components/lessons/LessonCard';
-import { useUnit, useLessons, useSubject } from '@/lib/hooks/useOakData'; // Assuming useSubject is available
-
-const PAID_SUBJECTS = ['german', 'french', 'spanish', 'latin']; // Re-define for consistency
+import { useUnit, useLessons } from '@/lib/hooks/useOakData';
 
 export default function UnitPage() {
   const params = useParams();
@@ -16,11 +14,7 @@ export default function UnitPage() {
   const { data: unit, error: unitError, isLoading: unitLoading } = useUnit(slug);
   const { data: lessons, error: lessonsError, isLoading: lessonsLoading } = useLessons({ unitSlug: slug });
 
-  // Fetch subject details to determine if it's a paid subject
-  const { data: subject, isLoading: subjectMetaLoading } = useSubject(unit?.subjectSlug || '', { enabled: !!unit?.subjectSlug });
-  const isPaidSubject = PAID_SUBJECTS.includes(subject?.slug.toLowerCase() || '');
-
-  const isLoading = unitLoading || lessonsLoading || subjectMetaLoading;
+  const isLoading = unitLoading || lessonsLoading;
   const error = unitError || lessonsError;
 
   if (isLoading) {
@@ -54,9 +48,13 @@ export default function UnitPage() {
         <nav className="mb-3 text-sm font-medium text-gray-500">
           <Link href="/browse" className="hover:text-primary">Browse</Link>
           <span className="mx-2">/</span>
-          <Link href={`/subjects/${unit.subjectSlug}`} className="hover:text-primary">
-            {unit.subjectTitle}
-          </Link>
+          {unit.keyStageSlug ? (
+            <Link href={`/subjects/${unit.keyStageSlug}/${unit.subjectSlug}`} className="hover:text-primary">
+              {unit.subjectTitle}
+            </Link>
+          ) : (
+            <span>{unit.subjectTitle}</span>
+          )}
           <span className="mx-2">/</span>
           <span className="text-gray-900">{unit.title}</span>
         </nav>
@@ -83,13 +81,11 @@ export default function UnitPage() {
           <div className="space-y-4">
             {lessons
               .sort((a, b) => a.lessonNumber - b.lessonNumber)
-              .map((lesson, index) => (
+              .map((lesson) => (
                 <LessonCard
                   key={lesson.slug}
                   lesson={lesson}
-                  subjectSlug={unit.subjectSlug} // Pass subjectSlug to LessonCard
-                  isPaidSubject={isPaidSubject}
-                  isFirstLesson={index === 0}
+                  subjectSlug={unit.subjectSlug}
                 />
               ))}
           </div>

@@ -98,10 +98,10 @@ export default function AboutPage() {
               Ready to Start Learning?
             </h2>
             <Link
-              href="/key-stages"
+              href="/pricing"
               className="inline-block px-8 py-4 bg-primary text-white font-semibold rounded-button shadow-md hover:bg-primary-dark transition-colors"
             >
-              Explore Key Stages
+              Start Free Trial
             </Link>
           </div>
         </div>

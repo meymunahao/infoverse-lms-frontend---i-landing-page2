@@ -22,10 +22,13 @@ export interface Unit {
   title: string;
   subjectSlug: string;
   subjectTitle: string;
+  keyStageSlug?: string;
+  keyStageTitle?: string;
   yearSlug?: string;
   yearTitle?: string;
   unitStudyOrder?: number;
   numberOfLessons: number;
+  unitNumber?: number;
 }
 
 export interface Lesson {
@@ -43,14 +46,26 @@ export interface Lesson {
   videoUrl?: string;
   worksheetUrl?: string;
   presentationUrl?: string;
-  starterQuiz?: Quiz[];
-  exitQuiz?: Quiz[];
 }
 
-export interface Quiz {
+export interface QuizAnswer {
+  type: string;
+  content: string;
+  distractor: boolean;
+  order?: number;
+  matchOption?: { type: string; content: string };
+  correctChoice?: { type: string; content: string };
+}
+
+export interface QuizQuestion {
   question: string;
-  answers: string[];
-  correctAnswer: number;
+  questionType: 'multiple-choice' | 'order' | 'match' | 'short-answer' | 'explanatory-text';
+  answers: QuizAnswer[];
+}
+
+export interface LessonQuiz {
+  starterQuiz: QuizQuestion[];
+  exitQuiz: QuizQuestion[];
 }
 
 export interface Year {
@@ -77,6 +92,7 @@ export interface SubjectFilters {
 }
 
 export interface UnitFilters {
+  keyStageSlug?: string;
   subjectSlug?: string;
   yearSlug?: string;
 }
@@ -85,4 +101,27 @@ export interface LessonFilters {
   unitSlug?: string;
   subjectSlug?: string;
   keyStageSlug?: string;
+}
+
+/**
+ * Lesson Asset Types
+ */
+export interface LessonAsset {
+  type: 'video' | 'slideDeck' | 'worksheet' | 'worksheetAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'exitQuiz' | 'exitQuizAnswers';
+  label: string;
+  url: string;
+}
+
+export interface LessonAssets {
+  assets: LessonAsset[];
+}
+
+export interface TranscriptSentence {
+  start: number;
+  end: number;
+  text: string;
+}
+
+export interface LessonTranscript {
+  sentences: TranscriptSentence[];
 }

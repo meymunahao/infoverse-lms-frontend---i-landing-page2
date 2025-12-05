@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Container } from '@/components/ui/Container';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { apiClient } from '@/lib/api/client';
+import { useAuth } from '@/contexts/AuthContext';
+import authApiClient from '@/lib/api/auth-client';
 import { cn } from '@/lib/utils/cn';
 
 interface Plan {
@@ -31,7 +33,7 @@ const plans: Plan[] = [
   {
     id: 'annual',
     name: 'Individual Annual',
-    price: '₦75,000',
+    price: '₦65,000',
     interval: '/ year',
     planCode: 'PLN_o1rf7r0jl507aoq',
     description: 'Best value for year-round success.',
@@ -41,31 +43,45 @@ const plans: Plan[] = [
   {
     id: 'family',
     name: 'Family Annual',
-    price: '₦150,000',
+    price: '₦115,000',
     interval: '/ year',
     planCode: 'PLN_8et2pw5d7mfg3j1',
     description: 'Great for families with multiple learners.',
-    features: ['Up to 4 accounts', 'Parental dashboard', 'Individual progress tracking', 'Family savings'],
+    features: ['Up to 5 accounts', 'Parental dashboard', 'Individual progress tracking', 'Family savings'],
   },
 ];
 
 export default function PricingPage() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
   const handleStartTrial = async (planCode: string) => {
+    // If user is not logged in, redirect to signup
+    if (!user) {
+      // Store selected plan in sessionStorage for after signup
+      sessionStorage.setItem('selectedPlan', planCode);
+      router.push('/register');
+      return;
+    }
+
     try {
       setLoadingPlan(planCode);
-      const response = await apiClient.post<{ authorization_url: string }>(
+      setError(null);
+      const response = await authApiClient.post<{ authorizationUrl: string; message: string }>(
         '/payment/start-trial',
         { planCode }
       );
 
-      if (response.data.authorization_url) {
-        window.location.href = response.data.authorization_url;
+      // Backend returns authorizationUrl (camelCase)
+      if (response.data.authorizationUrl) {
+        window.location.href = response.data.authorizationUrl;
       }
-    } catch (error) {
-      console.error('Failed to start trial:', error);
-      // Ideally, show a toast notification here
+    } catch (err: any) {
+      console.error('Failed to start trial:', err);
+      const errorMessage = err.response?.data?.error || 'Failed to start trial. Please try again.';
+      setError(errorMessage);
     } finally {
       setLoadingPlan(null);
     }
@@ -79,9 +95,15 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-gray-600">
-            Start your 7-day free trial today. Cancel anytime.
+            Start your 14-day free trial today. No credit card required.
           </p>
         </div>
+
+        {error && (
+          <div className="max-w-md mx-auto mb-8 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-center">
+            {error}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {plans.map((plan) => (
@@ -143,8 +165,11 @@ export default function PricingPage() {
                     variant={plan.isPopular ? 'primary' : 'outline'}
                     size="lg"
                   >
-                    Start 7-Day Free Trial
+                    {user ? 'Start 14-Day Free Trial' : 'Get Started Free'}
                   </Button>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    No credit card required
+                  </p>
                 </CardContent>
               </Card>
             </div>

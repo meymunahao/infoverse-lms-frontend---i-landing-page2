@@ -87,14 +87,13 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Access thousands of high-quality, curriculum-aligned lessons and resources.
-              Free for everyone, forever.
+              Access high-quality curriculum-aligned lessons and resources free for everyone for the next 14 days (No credit card required).
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/key-stages">
+              <Link href="/pricing">
                 <Button size="lg" className="h-14 px-8 text-lg">
-                  Start Learning
+                  Start Free Trial
                 </Button>
               </Link>
               <Link href="/about">
@@ -105,14 +104,12 @@ export default function Home() {
             </div>
             
             {/* Stats/Social Proof */}
-            <div className="mt-16 pt-8 border-t border-gray-200 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="mt-16 pt-8 border-t border-gray-200 flex justify-center gap-16">
               {[
-                { label: 'Lessons', value: '10,000+' },
-                { label: 'Subjects', value: '25+' },
-                { label: 'Schools', value: '1,000+' },
-                { label: 'Teachers', value: '500+' },
+                { label: 'Lessons', value: '100+' },
+                { label: 'Subjects', value: '10+' },
               ].map((stat) => (
-                <div key={stat.label}>
+                <div key={stat.label} className="text-center">
                   <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
                   <div className="text-sm text-gray-500">{stat.label}</div>
                 </div>

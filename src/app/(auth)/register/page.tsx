@@ -59,7 +59,7 @@ export default function RegisterPage() {
 
     try {
       await register(formData.name, formData.email, formData.password);
-      router.push('/key-stages');
+      router.push('/onboarding');
     } catch (error: any) {
       setGeneralError(
         error.response?.data?.error?.message ||

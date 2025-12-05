@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import authApiClient from './auth-client';
 import { API_ENDPOINTS } from '@/config/api.config';
 import {
   mockKeyStages,
@@ -12,10 +13,35 @@ import type {
   Unit,
   Lesson,
   Year,
+  LessonQuiz,
+  LessonAssets,
+  LessonTranscript,
   SubjectFilters,
   UnitFilters,
   LessonFilters,
 } from '@/types/oak-api.types';
+
+/**
+ * Enrollment types
+ */
+export interface EnrollmentProgress {
+  _id: string;
+  subjectSlug: string;
+  keyStage: string;
+  status: string;
+  startDate: string;
+  lastAccessedAt: string;
+  progress: {
+    totalLessons: number;
+    completedLessons: number;
+    progressPercent: number;
+  };
+}
+
+export interface EnrollRequest {
+  subjectSlug: string;
+  keyStage: string;
+}
 
 /**
  * Backend API Response wrapper
@@ -90,12 +116,12 @@ export const oakService = {
       return Promise.resolve(Object.values(mockUnits).flat());
     }
 
-    // Real API call - requires subjectSlug
-    if (!filters?.subjectSlug) {
-      throw new Error('subjectSlug is required to fetch units');
+    // Real API call - requires BOTH keyStageSlug and subjectSlug
+    if (!filters?.keyStageSlug || !filters?.subjectSlug) {
+      throw new Error('Both keyStageSlug and subjectSlug are required to fetch units');
     }
 
-    const endpoint = API_ENDPOINTS.units(filters.subjectSlug);
+    const endpoint = API_ENDPOINTS.units(filters.keyStageSlug, filters.subjectSlug);
     const response = await apiClient.get<BackendResponse<Unit[]>>(endpoint);
     return response.data.data; // Unwrap: response.data.data to get the array
   },
@@ -124,8 +150,6 @@ export const oakService = {
 
   /**
    * Fetch a single lesson by slug
-   * NOTE: This endpoint is not yet implemented in the backend API
-   * You may need to add: GET /api/v1/oak/lessons/:slug
    */
   async getLesson(slug: string): Promise<Lesson> {
     if (useMockData()) {
@@ -138,15 +162,16 @@ export const oakService = {
       return Promise.reject(new Error('Lesson not found'));
     }
 
-    // Real API call - requires backend endpoint implementation
-    const response = await apiClient.get<BackendResponse<Lesson>>(`/lessons/${slug}`);
+    // Real API call using the lesson endpoint
+    const endpoint = API_ENDPOINTS.lesson(slug);
+    const response = await apiClient.get<BackendResponse<Lesson>>(endpoint);
     return response.data.data; // Unwrap: response.data.data to get the object
   },
 
   /**
    * Fetch years/year groups
-   * NOTE: This endpoint is not yet implemented in the backend API
-   * You may need to add: GET /api/v1/oak/years
+   * NOTE: This endpoint is NOT implemented in the backend API
+   * You need to add: GET /oak/years to your backend
    */
   async getYears(): Promise<Year[]> {
     if (useMockData()) {
@@ -154,15 +179,15 @@ export const oakService = {
       return Promise.resolve([]);
     }
 
-    // Real API call - requires backend endpoint implementation
-    const response = await apiClient.get<BackendResponse<Year[]>>('/years');
-    return response.data.data; // Unwrap: response.data.data to get the array
+    // Real API call - NOT YET IMPLEMENTED IN BACKEND
+    throw new Error('getYears endpoint is not implemented in the backend. Please add GET /oak/years to your backend API.');
   },
 
   /**
    * Fetch subject by slug
-   * NOTE: This endpoint is not yet implemented in the backend API
-   * You may need to add: GET /api/v1/oak/subjects/:slug
+   * NOTE: This endpoint is NOT implemented in the backend API
+   * Backend only supports: GET /oak/keystages/:keyStage/subjects
+   * You need to add: GET /oak/subjects/:slug to your backend
    */
   async getSubject(slug: string): Promise<Subject> {
     if (useMockData()) {
@@ -175,15 +200,12 @@ export const oakService = {
       return Promise.reject(new Error('Subject not found'));
     }
 
-    // Real API call - requires backend endpoint implementation
-    const response = await apiClient.get<BackendResponse<Subject>>(`/subjects/${slug}`);
-    return response.data.data; // Unwrap: response.data.data to get the object
+    // Real API call - NOT YET IMPLEMENTED IN BACKEND
+    throw new Error('getSubject endpoint is not implemented in the backend. Please add GET /oak/subjects/:slug to your backend API.');
   },
 
   /**
    * Fetch unit by slug
-   * NOTE: This endpoint is not yet implemented in the backend API
-   * You may need to add: GET /api/v1/oak/units/:slug
    */
   async getUnit(slug: string): Promise<Unit> {
     if (useMockData()) {
@@ -196,8 +218,70 @@ export const oakService = {
       return Promise.reject(new Error('Unit not found'));
     }
 
-    // Real API call - requires backend endpoint implementation
-    const response = await apiClient.get<BackendResponse<Unit>>(`/units/${slug}`);
+    // Real API call
+    const endpoint = API_ENDPOINTS.unit(slug);
+    const response = await apiClient.get<BackendResponse<Unit>>(endpoint);
     return response.data.data; // Unwrap: response.data.data to get the object
+  },
+
+  /**
+   * Fetch quiz questions for a lesson
+   */
+  async getLessonQuiz(lessonSlug: string): Promise<LessonQuiz> {
+    if (useMockData()) {
+      // Return empty quiz for mock data
+      return Promise.resolve({ starterQuiz: [], exitQuiz: [] });
+    }
+
+    // Real API call
+    const endpoint = API_ENDPOINTS.lessonQuiz(lessonSlug);
+    const response = await apiClient.get<BackendResponse<LessonQuiz>>(endpoint);
+    return response.data.data;
+  },
+
+  /**
+   * Fetch lesson assets (video, worksheets, slides)
+   */
+  async getLessonAssets(lessonSlug: string): Promise<LessonAssets> {
+    if (useMockData()) {
+      // Return empty assets for mock data
+      return Promise.resolve({ assets: [] });
+    }
+
+    // Real API call
+    const endpoint = API_ENDPOINTS.lessonAssets(lessonSlug);
+    const response = await apiClient.get<BackendResponse<LessonAssets>>(endpoint);
+    return response.data.data;
+  },
+
+  /**
+   * Fetch lesson transcript
+   */
+  async getLessonTranscript(lessonSlug: string): Promise<LessonTranscript> {
+    if (useMockData()) {
+      // Return empty transcript for mock data
+      return Promise.resolve({ sentences: [] });
+    }
+
+    // Real API call
+    const endpoint = API_ENDPOINTS.lessonTranscript(lessonSlug);
+    const response = await apiClient.get<BackendResponse<LessonTranscript>>(endpoint);
+    return response.data.data;
+  },
+
+  /**
+   * Get user's enrolled courses and progress
+   */
+  async getMyProgress(): Promise<EnrollmentProgress[]> {
+    const response = await authApiClient.get<BackendResponse<EnrollmentProgress[]>>(API_ENDPOINTS.myProgress);
+    return response.data.data || [];
+  },
+
+  /**
+   * Enroll in a subject
+   */
+  async enrollInSubject(data: EnrollRequest): Promise<EnrollmentProgress> {
+    const response = await authApiClient.post<BackendResponse<EnrollmentProgress>>(API_ENDPOINTS.enroll, data);
+    return response.data.data;
   },
 };

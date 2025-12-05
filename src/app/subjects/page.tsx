@@ -59,7 +59,7 @@ export default function SubjectsPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {subjects.map((subject) => (
-                <Link key={subject.slug} href={`/subjects/${subject.slug}`}>
+                <Link key={subject.slug} href={`/subjects/${subject.keyStageSlug}/${subject.slug}`}>
                   <Card hover>
                     <CardHeader>
                       <CardTitle>{subject.title}</CardTitle>

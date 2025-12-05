@@ -29,7 +29,8 @@ export function SubjectCard({ subject, keyStage }: SubjectCardProps) {
   const firstLetter = subject.title.charAt(0).toUpperCase();
 
   const CardWrapper = ({ children }: { children: React.ReactNode }) => {
-    return <Link href={`/subjects/${subject.slug}`} className="h-full block">{children}</Link>;
+    const keyStageSlug = `ks${keyStage}`;
+    return <Link href={`/subjects/${keyStageSlug}/${subject.slug}`} className="h-full block">{children}</Link>;
   };
 
   return (
