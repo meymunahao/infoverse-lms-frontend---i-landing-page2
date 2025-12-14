@@ -1,11 +1,24 @@
 'use client';
-
+import { ContentRenderer } from '@/components/quiz/ContentRenderer';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Container, Card, CardHeader, CardTitle, CardContent, Loading, Button } from '@/components/ui';
+import {
+  Container,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Loading,
+  Button,
+} from '@/components/ui';
 import { QuizSection } from '@/components/quiz';
 import { VideoPlayer, AssetDownloads } from '@/components/lessons';
-import { useLesson, useLessonQuiz, useLessonAssets, useLessonTranscript } from '@/lib/hooks/useOakData';
+import {
+  useLesson,
+  useLessonQuiz,
+  useLessonAssets,
+  useLessonTranscript,
+} from '@/lib/hooks/useOakData';
 
 export default function LessonPage() {
   const params = useParams();
@@ -47,15 +60,25 @@ export default function LessonPage() {
       <Container>
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm text-text-light">
-          <Link href="/" className="hover:text-primary">Home</Link>
+          <Link href="/" className="hover:text-primary">
+            Home
+          </Link>
           {' / '}
-          <Link href="/subjects" className="hover:text-primary">Subjects</Link>
+          <Link href="/subjects" className="hover:text-primary">
+            Subjects
+          </Link>
           {' / '}
-          <Link href={`/subjects/${lesson.keyStageSlug}/${lesson.subjectSlug}`} className="hover:text-primary">
+          <Link
+            href={`/subjects/${lesson.keyStageSlug}/${lesson.subjectSlug}`}
+            className="hover:text-primary"
+          >
             {lesson.subjectTitle}
           </Link>
           {' / '}
-          <Link href={`/units/${lesson.unitSlug}`} className="hover:text-primary">
+          <Link
+            href={`/units/${lesson.unitSlug}`}
+            className="hover:text-primary"
+          >
             {lesson.unitTitle}
           </Link>
           {' / '}
@@ -94,8 +117,8 @@ export default function LessonPage() {
             <CardHeader>
               <CardTitle>Lesson Description</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-text-dark">{lesson.description}</p>
+            <CardContent className="prose max-w-none">
+              <ContentRenderer content={lesson.description} />
             </CardContent>
           </Card>
         )}
