@@ -26,10 +26,14 @@ interface User {
   createdAt?: string;
 }
 
+interface RegisterResult {
+  skipPayment: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, licenseKey?: string) => Promise<RegisterResult>;
   logout: () => void;
   loading: boolean;
   isTrialExpired: boolean;
@@ -107,15 +111,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(userData);
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const res = await authApiClient.post('/auth/register', {
+  const register = async (name: string, email: string, password: string, licenseKey?: string): Promise<RegisterResult> => {
+    const payload: { name: string; email: string; password: string; licenseKey?: string } = {
       name,
       email,
       password,
-    });
-    const { token, user: userData } = res.data.data;
+    };
+
+    if (licenseKey) {
+      payload.licenseKey = licenseKey;
+    }
+
+    const res = await authApiClient.post('/auth/register', payload);
+    const { token, user: userData, skipPayment } = res.data.data;
     localStorage.setItem('token', token);
     setUser(userData);
+
+    return { skipPayment: !!skipPayment };
   };
 
   const logout = () => {

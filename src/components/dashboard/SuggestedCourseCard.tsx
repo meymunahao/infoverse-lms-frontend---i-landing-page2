@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 interface SuggestedCourseCardProps {
   courseName: string;
   description: string;
@@ -11,7 +13,7 @@ export default function SuggestedCourseCard({
 }: SuggestedCourseCardProps) {
   // Get subject icon based on name
   const getSubjectIcon = (name: string) => {
-    const icons: Record<string, JSX.Element> = {
+    const icons: Record<string, ReactNode> = {
       History: (
         <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

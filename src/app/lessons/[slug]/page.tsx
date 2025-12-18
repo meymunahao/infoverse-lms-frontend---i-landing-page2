@@ -13,6 +13,8 @@ import {
 } from '@/components/ui';
 import { QuizSection } from '@/components/quiz';
 import { VideoPlayer, AssetDownloads } from '@/components/lessons';
+import { AiHelperButton } from '@/components/ai';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   useLesson,
   useLessonQuiz,
@@ -23,11 +25,28 @@ import {
 export default function LessonPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const { user } = useAuth();
 
   const { data: lesson, error, isLoading } = useLesson(slug);
   const { data: quizData, isLoading: quizLoading } = useLessonQuiz(slug);
   const { data: assetsData, isLoading: assetsLoading } = useLessonAssets(slug);
   const { data: transcriptData } = useLessonTranscript(slug);
+
+  // Build context for AI helper
+  const buildLessonContext = () => {
+    if (!lesson) return '';
+    let context = `Lesson: ${lesson.title}\n`;
+    context += `Subject: ${lesson.subjectTitle}\n`;
+    context += `Key Stage: ${lesson.keyStageTitle}\n`;
+    context += `Unit: ${lesson.unitTitle}\n\n`;
+    if (lesson.description) {
+      context += `Description: ${typeof lesson.description === 'string' ? lesson.description : ''}\n\n`;
+    }
+    if (transcriptData) {
+      context += `Transcript: ${transcriptData.substring(0, 5000)}\n`;
+    }
+    return context;
+  };
 
   if (isLoading) {
     return (
@@ -167,6 +186,14 @@ export default function LessonPage() {
           </Link>
         </div>
       </Container>
+
+      {/* AI Helper Button - Only show for authenticated users */}
+      {user && lesson && (
+        <AiHelperButton
+          lessonContext={buildLessonContext()}
+          lessonTitle={lesson.title}
+        />
+      )}
     </div>
   );
 }

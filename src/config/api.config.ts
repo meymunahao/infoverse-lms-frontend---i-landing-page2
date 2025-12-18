@@ -19,6 +19,13 @@ export const API_ENDPOINTS = {
   // Progress & Enrollment endpoints
   myProgress: '/progress/my-progress',
   enroll: '/progress/enroll',
+  // AI Tutor endpoints
+  aiTutor: '/ai/tutor',
+  aiSummary: '/ai/summary',
+  aiExplain: '/ai/explain',
+  // Content/Blog endpoints
+  contentPosts: '/content/posts',
+  contentPost: (slug: string) => `/content/posts/${slug}`,
 } as const;
 
 export const API_CONFIG = {

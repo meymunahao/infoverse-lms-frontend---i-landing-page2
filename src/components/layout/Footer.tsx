@@ -33,6 +33,22 @@ export const Footer: React.FC = () => {
                     About
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/blog"
+                    className="text-gray-300 hover:text-secondary-light transition-colors"
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/nurtured"
+                    className="text-gray-300 hover:text-secondary-light transition-colors"
+                  >
+                    Schools
+                  </Link>
+                </li>
               </ul>
             </div>
 

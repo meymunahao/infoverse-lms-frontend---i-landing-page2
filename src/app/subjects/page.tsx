@@ -30,15 +30,21 @@ export default function SubjectsPage() {
     );
   }
 
+  // Filter out blocked subjects (geography) as a frontend fallback
+  const BLOCKED_SUBJECTS = ['geography'];
+  const filteredSubjects = subjects?.filter(
+    (subject) => !BLOCKED_SUBJECTS.includes(subject.slug)
+  );
+
   // Group subjects by key stage
-  const subjectsByKeyStage = subjects?.reduce((acc, subject) => {
+  const subjectsByKeyStage = filteredSubjects?.reduce((acc, subject) => {
     const keyStage = subject.keyStageTitle || 'Other';
     if (!acc[keyStage]) {
       acc[keyStage] = [];
     }
     acc[keyStage].push(subject);
     return acc;
-  }, {} as Record<string, typeof subjects>);
+  }, {} as Record<string, typeof filteredSubjects>);
 
   return (
     <div className="bg-background-light min-h-screen py-16">
